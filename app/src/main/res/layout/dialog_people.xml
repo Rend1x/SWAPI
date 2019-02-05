@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dialog_name"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/MyTextDialogName"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginStart="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/MyTextDialog"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/dialog_gender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/MyTextDialog"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"/>
+
+            </LinearLayout>
+
+
+           <LinearLayout
+               android:orientation="horizontal"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:text="@string/birth"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:theme="@style/MyTextDialog"
+                   android:layout_marginTop="5dp"
+                   android:layout_marginRight="5dp"
+                   android:layout_marginBottom="10dp"/>
+
+               <TextView
+                   android:id="@+id/dialog_birth"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:theme="@style/MyTextDialog"
+                   android:layout_marginTop="5dp"
+                   android:layout_marginBottom="10dp"/>
+
+
+           </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_marginStart="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="@string/height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/MyTextDialog"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/dialog_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/MyTextDialog"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:text="@string/mass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/MyTextDialog"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="10dp"/>
+
+            <TextView
+                android:id="@+id/dialog_mass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:theme="@style/MyTextDialog"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_marginStart="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="@string/hair"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/MyTextDialog"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"/>
+
+                <TextView
+                    android:id="@+id/dialog_hair"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/MyTextDialog"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"/>
+
+            </LinearLayout>
+
+           <LinearLayout
+               android:orientation="horizontal"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:text="@string/eye"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:theme="@style/MyTextDialog"
+                   android:layout_marginTop="5dp"
+                   android:layout_marginRight="5dp"
+                   android:layout_marginBottom="10dp"/>
+
+               <TextView
+                   android:id="@+id/dialog_eye"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:theme="@style/MyTextDialog"
+                   android:layout_marginTop="5dp"
+                   android:layout_marginBottom="10dp"/>
+
+           </LinearLayout>
+
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/dialog_save"
+            android:padding="20dp"
+            android:textAlignment="textStart"
+            android:drawablePadding="20dp"
+            android:drawableLeft="@drawable/ic_save"
+            android:background="@color/white"
+            android:text="@string/save"
+            android:layout_gravity="start"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>
