@@ -25,6 +25,8 @@ import com.google.android.gms.security.ProviderInstaller;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.observers.DisposableObserver;
@@ -34,7 +36,9 @@ import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
+    @BindView(R.id.recycle)
+    RecyclerView recyclerView;
+
     private List<People> people = new ArrayList<>();
     private CompositeDisposable disposable = new CompositeDisposable();
 
@@ -42,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
 
         //recycle
         initRecycle();
@@ -55,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecycle() {
-        recyclerView = findViewById(R.id.recycle);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

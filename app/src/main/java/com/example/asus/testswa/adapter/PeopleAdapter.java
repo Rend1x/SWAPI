@@ -1,6 +1,5 @@
 package com.example.asus.testswa.adapter;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -10,28 +9,40 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.asus.testswa.database.PeopleRepository;
 import com.example.asus.testswa.model.People;
 import com.example.asus.testswa.R;
-import com.example.asus.testswa.sqlite.DatabaseHelper;
+import com.example.asus.testswa.room.PeopleData;
+import com.example.asus.testswa.room.PeopleDatabase;
 
 import java.util.List;
 import java.util.Objects;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+
 public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
 
     private Context context;
-    private List<People> people;
-    private Dialog mDialog;
-    private DatabaseHelper databaseHelper;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private List<People> peopleList;
+    private PeopleRepository repository;
+
 
     public PeopleAdapter(Context context, List<People> people) {
         this.context = context;
-        this.people = people;
+        this.peopleList = people;
     }
+
 
     @NonNull
     @Override
@@ -42,55 +53,69 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PeopleViewHolder holder, @SuppressLint("RecyclerView") final int pos) {
+    public void onBindViewHolder(@NonNull PeopleViewHolder holder, final int pos) {
 
-        holder.name.setText(people.get(pos).getName());
-        holder.birth.setText(people.get(pos).getBirth_year());
-        holder.gender.setText(people.get(pos).getGender());
+        holder.name.setText(peopleList.get(pos).getName());
+        holder.birth.setText(peopleList.get(pos).getBirth_year());
+        holder.gender.setText(peopleList.get(pos).getGender());
 
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDialog = new Dialog(context);
-                databaseHelper = new DatabaseHelper(context);
+
+                PeopleDatabase database = PeopleDatabase.getInstance(context);
+                repository = PeopleRepository.getInstance(PeopleData.getInstance(database.peopleDAO()));
+                Dialog mDialog = new Dialog(context);
                 mDialog.setContentView(R.layout.dialog_people);
                 Objects.requireNonNull(mDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                TextView name = mDialog.findViewById(R.id.dialog_name);
-                TextView birth = mDialog.findViewById(R.id.dialog_birth);
-                TextView gender = mDialog.findViewById(R.id.dialog_gender);
-                TextView height = mDialog.findViewById(R.id.dialog_height);
-                TextView mass = mDialog.findViewById(R.id.dialog_mass);
-                TextView hair = mDialog.findViewById(R.id.dialog_hair);
-                TextView eye = mDialog.findViewById(R.id.dialog_eye);
-                final Button save = mDialog.findViewById(R.id.dialog_save);
-
-                name.setText(people.get(pos).getName());
-                birth.setText(people.get(pos).getBirth_year());
-                gender.setText(people.get(pos).getGender());
-                height.setText(people.get(pos).getHeight());
-                mass.setText(people.get(pos).getMass());
-                hair.setText(people.get(pos).getHair_color());
-                eye.setText(people.get(pos).getEye_color());
-
-                if (databaseHelper.checkName(people.get(pos).getName())){
-                    save.setVisibility(View.GONE);
-                }else {
-                    save.setVisibility(View.VISIBLE);
-                }
-
-                save.setOnClickListener(new View.OnClickListener() {
+                Disposable disposable = Observable.create(new ObservableOnSubscribe<Object>() {
                     @Override
-                    public void onClick(View v) {
-                        if (databaseHelper.checkName(people.get(pos).getName())){
-                            Toast.makeText(context,R.string.saved_people_1,Toast.LENGTH_SHORT).show();
-                        }else {
-                            databaseHelper.addUser(people.get(pos));
-                            Toast.makeText(context, R.string.saved_people_2,Toast.LENGTH_SHORT).show();
-                        }
+                    public void subscribe(ObservableEmitter<Object> e) throws Exception {
+                        People people = new People(peopleList.get(pos).getName(),
+                                peopleList.get(pos).getHeight(),
+                                peopleList.get(pos).getMass(),
+                                peopleList.get(pos).getHair_color(),
+                                peopleList.get(pos).getSkin_color(),
+                                peopleList.get(pos).getEye_color(),
+                                peopleList.get(pos).getBirth_year(),
+                                peopleList.get(pos).getGender());
+                        repository.insertPeople(people);
+                        e.onComplete();
                     }
-                });
+                }).observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Consumer() {
+                            @Override
+                            public void accept(Object o) throws Exception {
+                                Toast.makeText(context, R.string.saved_people_2, Toast.LENGTH_SHORT).show();
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Exception {
+                                Toast.makeText(context, ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                compositeDisposable.add(disposable);
+
+                TextView name_dialog = mDialog.findViewById(R.id.dialog_name);
+                TextView birth_dialog = mDialog.findViewById(R.id.dialog_birth);
+                TextView gender_dialog = mDialog.findViewById(R.id.dialog_gender);
+                TextView height_dialog = mDialog.findViewById(R.id.dialog_height);
+                TextView mass_dialog = mDialog.findViewById(R.id.dialog_mass);
+                TextView hair_dialog = mDialog.findViewById(R.id.dialog_hair);
+                TextView eye_dialog = mDialog.findViewById(R.id.dialog_eye);
+
+                name_dialog.setText(peopleList.get(pos).getName());
+                birth_dialog.setText(peopleList.get(pos).getBirth_year());
+                gender_dialog.setText(peopleList.get(pos).getGender());
+                height_dialog.setText(peopleList.get(pos).getHeight());
+                mass_dialog.setText(peopleList.get(pos).getMass());
+                hair_dialog.setText(peopleList.get(pos).getHair_color());
+                eye_dialog.setText(peopleList.get(pos).getEye_color());
+
                 mDialog.show();
+
             }
         });
 
@@ -98,6 +123,6 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
 
     @Override
     public int getItemCount() {
-        return people.size();
+        return peopleList.size();
     }
 }
