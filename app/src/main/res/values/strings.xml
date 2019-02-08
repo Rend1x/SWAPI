@@ -10,4 +10,5 @@
     <string name="error_network">Соедение с интернетом отсутствует</string>
     <string name="search_people">Поиск пересонажа...</string>
     <string name="saved_people_2">Персонаж сохранен</string>
+    <string name="saved">Сохраненые персонажи</string>
 </resources>
