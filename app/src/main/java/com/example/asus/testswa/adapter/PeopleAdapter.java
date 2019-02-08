@@ -12,9 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.asus.testswa.R;
 import com.example.asus.testswa.database.PeopleRepository;
 import com.example.asus.testswa.model.People;
-import com.example.asus.testswa.R;
 import com.example.asus.testswa.room.PeopleData;
 import com.example.asus.testswa.room.PeopleDatabase;
 
@@ -32,15 +32,14 @@ import io.reactivex.schedulers.Schedulers;
 
 public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
 
-    private Context context;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private List<People> peopleList;
-    private PeopleRepository repository;
+    private Context mContext;
+    private List<People> mPeopleList;
+    private PeopleRepository mRepository;
 
 
     public PeopleAdapter(Context context, List<People> people) {
-        this.context = context;
-        this.peopleList = people;
+        this.mContext = context;
+        this.mPeopleList = people;
     }
 
 
@@ -48,39 +47,39 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
     @Override
     public PeopleViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.people_layout,viewGroup,false);
+                .inflate(R.layout.people_layout, viewGroup, false);
         return new PeopleViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull PeopleViewHolder holder, final int pos) {
 
-        holder.name.setText(peopleList.get(pos).getName());
-        holder.birth.setText(peopleList.get(pos).getBirth_year());
-        holder.gender.setText(peopleList.get(pos).getGender());
+        holder.mName.setText(mPeopleList.get(pos).getName());
+        holder.mBirth.setText(mPeopleList.get(pos).getBirth_year());
+        holder.mGender.setText(mPeopleList.get(pos).getGender());
 
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                PeopleDatabase database = PeopleDatabase.getInstance(context);
-                repository = PeopleRepository.getInstance(PeopleData.getInstance(database.peopleDAO()));
-                Dialog mDialog = new Dialog(context);
+                PeopleDatabase mDatabase = PeopleDatabase.getInstance(mContext);
+                mRepository = PeopleRepository.getInstance(PeopleData.getInstance(mDatabase.peopleDAO()));
+                Dialog mDialog = new Dialog(mContext);
                 mDialog.setContentView(R.layout.dialog_people);
                 Objects.requireNonNull(mDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
                 Disposable disposable = Observable.create(new ObservableOnSubscribe<Object>() {
                     @Override
                     public void subscribe(ObservableEmitter<Object> e) throws Exception {
-                        People people = new People(peopleList.get(pos).getName(),
-                                peopleList.get(pos).getHeight(),
-                                peopleList.get(pos).getMass(),
-                                peopleList.get(pos).getHair_color(),
-                                peopleList.get(pos).getSkin_color(),
-                                peopleList.get(pos).getEye_color(),
-                                peopleList.get(pos).getBirth_year(),
-                                peopleList.get(pos).getGender());
-                        repository.insertPeople(people);
+                        People people = new People(mPeopleList.get(pos).getName(),
+                                mPeopleList.get(pos).getHeight(),
+                                mPeopleList.get(pos).getMass(),
+                                mPeopleList.get(pos).getHair_color(),
+                                mPeopleList.get(pos).getSkin_color(),
+                                mPeopleList.get(pos).getEye_color(),
+                                mPeopleList.get(pos).getBirth_year(),
+                                mPeopleList.get(pos).getGender());
+                        mRepository.insertPeople(people);
                         e.onComplete();
                     }
                 }).observeOn(AndroidSchedulers.mainThread())
@@ -88,31 +87,33 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
                         .subscribe(new Consumer() {
                             @Override
                             public void accept(Object o) throws Exception {
-                                Toast.makeText(context, R.string.saved_people_2, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.saved_people_2, Toast.LENGTH_SHORT).show();
                             }
                         }, new Consumer<Throwable>() {
                             @Override
                             public void accept(Throwable throwable) throws Exception {
-                                Toast.makeText(context, ""+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
+
+                CompositeDisposable compositeDisposable = new CompositeDisposable();
                 compositeDisposable.add(disposable);
 
-                TextView name_dialog = mDialog.findViewById(R.id.dialog_name);
-                TextView birth_dialog = mDialog.findViewById(R.id.dialog_birth);
-                TextView gender_dialog = mDialog.findViewById(R.id.dialog_gender);
-                TextView height_dialog = mDialog.findViewById(R.id.dialog_height);
-                TextView mass_dialog = mDialog.findViewById(R.id.dialog_mass);
-                TextView hair_dialog = mDialog.findViewById(R.id.dialog_hair);
-                TextView eye_dialog = mDialog.findViewById(R.id.dialog_eye);
+                TextView mNameDialog = mDialog.findViewById(R.id.dialog_name);
+                TextView mBirthDialog = mDialog.findViewById(R.id.dialog_birth);
+                TextView mGenderDialog = mDialog.findViewById(R.id.dialog_gender);
+                TextView mHeightDialog = mDialog.findViewById(R.id.dialog_height);
+                TextView mMassDialog = mDialog.findViewById(R.id.dialog_mass);
+                TextView mHairDialog = mDialog.findViewById(R.id.dialog_hair);
+                TextView mEyeDialog = mDialog.findViewById(R.id.dialog_eye);
 
-                name_dialog.setText(peopleList.get(pos).getName());
-                birth_dialog.setText(peopleList.get(pos).getBirth_year());
-                gender_dialog.setText(peopleList.get(pos).getGender());
-                height_dialog.setText(peopleList.get(pos).getHeight());
-                mass_dialog.setText(peopleList.get(pos).getMass());
-                hair_dialog.setText(peopleList.get(pos).getHair_color());
-                eye_dialog.setText(peopleList.get(pos).getEye_color());
+                mNameDialog.setText(mPeopleList.get(pos).getName());
+                mBirthDialog.setText(mPeopleList.get(pos).getBirth_year());
+                mGenderDialog.setText(mPeopleList.get(pos).getGender());
+                mHeightDialog.setText(mPeopleList.get(pos).getHeight());
+                mMassDialog.setText(mPeopleList.get(pos).getMass());
+                mHairDialog.setText(mPeopleList.get(pos).getHair_color());
+                mEyeDialog.setText(mPeopleList.get(pos).getEye_color());
 
                 mDialog.show();
 
@@ -123,6 +124,6 @@ public class PeopleAdapter extends RecyclerView.Adapter<PeopleViewHolder> {
 
     @Override
     public int getItemCount() {
-        return peopleList.size();
+        return mPeopleList.size();
     }
 }

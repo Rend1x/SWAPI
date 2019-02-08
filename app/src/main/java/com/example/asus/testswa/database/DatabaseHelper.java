@@ -9,6 +9,7 @@ import io.reactivex.Flowable;
 public interface DatabaseHelper {
 
     Flowable<List<People>> getAllPeople();
+
     void insertPeople(People... people);
 
 }

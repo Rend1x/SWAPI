@@ -8,28 +8,28 @@ import io.reactivex.Flowable;
 
 public class PeopleRepository implements DatabaseHelper {
 
-    private DatabaseHelper helper;
+    private DatabaseHelper mDBHelper;
 
-    private PeopleRepository(DatabaseHelper helper) {
-        this.helper = helper;
+    private PeopleRepository(DatabaseHelper mDBHelper) {
+        this.mDBHelper = mDBHelper;
     }
 
-    private static PeopleRepository mInstance;
+    private static PeopleRepository sInstance;
 
-    public static PeopleRepository getInstance(DatabaseHelper helper){
-        if (mInstance == null){
-            mInstance = new PeopleRepository(helper);
+    public static PeopleRepository getInstance(DatabaseHelper mDBHelper) {
+        if (sInstance == null) {
+            sInstance = new PeopleRepository(mDBHelper);
         }
-        return mInstance;
+        return sInstance;
     }
 
     @Override
     public Flowable<List<People>> getAllPeople() {
-        return helper.getAllPeople();
+        return mDBHelper.getAllPeople();
     }
 
     @Override
     public void insertPeople(People... people) {
-        helper.insertPeople(people);
+        mDBHelper.insertPeople(people);
     }
 }

@@ -18,9 +18,9 @@ public abstract class PeopleDatabase extends RoomDatabase {
 
     private static PeopleDatabase mInstance;
 
-    public static PeopleDatabase getInstance(Context context){
-        if (mInstance == null){
-            mInstance = Room.databaseBuilder(context,PeopleDatabase.class,DATABASE_NAME)
+    public static PeopleDatabase getInstance(Context context) {
+        if (mInstance == null) {
+            mInstance = Room.databaseBuilder(context, PeopleDatabase.class, DATABASE_NAME)
                     .fallbackToDestructiveMigration()
                     .build();
         }

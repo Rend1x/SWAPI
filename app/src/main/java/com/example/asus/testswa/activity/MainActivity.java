@@ -12,10 +12,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.asus.testswa.R;
 import com.example.asus.testswa.adapter.PeopleAdapter;
 import com.example.asus.testswa.model.Example;
 import com.example.asus.testswa.model.People;
-import com.example.asus.testswa.R;
 import com.example.asus.testswa.retrofit.MyAPI;
 import com.example.asus.testswa.retrofit.RetrofitClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -37,11 +37,10 @@ import retrofit2.Retrofit;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.recycle)
-    RecyclerView recyclerView;
+    RecyclerView mRecyclerView;
 
-    private List<People> people = new ArrayList<>();
-    private CompositeDisposable disposable = new CompositeDisposable();
-    private MyAPI myAPI;
+    private List<People> mPeople = new ArrayList<>();
+    private MyAPI mMyAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main,menu);
+        menuInflater.inflate(R.menu.menu_main, menu);
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         final SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
 
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (query.length() >= 1){
+                if (query.length() >= 1) {
                     getPeopleData(query);
                 }
                 return false;
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
-        menuItem.getIcon().setVisible(false,false);
+        menuItem.getIcon().setVisible(false, false);
 
         saved.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -106,27 +105,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initRecycle() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void initAPI(){
+    private void initAPI() {
         Retrofit retrofit = RetrofitClient.getInstance();
-        myAPI = retrofit.create(MyAPI.class);
+        mMyAPI = retrofit.create(MyAPI.class);
     }
 
     private void getPeopleData(final String keyword) {
 
         initAPI();
 
-        disposable.add(myAPI.getPeople(keyword)
+        CompositeDisposable disposable = new CompositeDisposable();
+
+        disposable.add(mMyAPI.getPeople(keyword)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<Example>() {
                     @Override
                     public void onNext(Example example) {
-                        people = example.getResults();
-                        displayData(people,keyword);
+                        mPeople = example.getResults();
+                        displayData(mPeople, keyword);
                     }
 
                     @Override
@@ -136,16 +137,17 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onComplete() {}
+                    public void onComplete() {
+                    }
                 }));
     }
 
 
-    private void displayData(List<People> people,String keyword) {
-        PeopleAdapter metricAdapter = new PeopleAdapter(this,people);
-        recyclerView.setAdapter(metricAdapter);
+    private void displayData(List<People> people, String keyword) {
+        PeopleAdapter metricAdapter = new PeopleAdapter(this, people);
+        mRecyclerView.setAdapter(metricAdapter);
         metricAdapter.notifyDataSetChanged();
-        if (keyword.length() == 0){
+        if (keyword.length() == 0) {
             people.clear();
             metricAdapter.notifyDataSetChanged();
         }

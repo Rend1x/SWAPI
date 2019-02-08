@@ -8,17 +8,19 @@ public class RetrofitClient {
 
     private static final String BASE_URL = "https://swapi.co/api/";
 
-    private static Retrofit ourInstance;
+    private static Retrofit sOurInstance;
 
     public static Retrofit getInstance() {
-        if (ourInstance == null){
-            ourInstance = new Retrofit.Builder()
+        if (sOurInstance == null) {
+            sOurInstance = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build();
         }
-        return ourInstance;
+        return sOurInstance;
     }
-    private RetrofitClient() {}
+
+    private RetrofitClient() {
+    }
 }

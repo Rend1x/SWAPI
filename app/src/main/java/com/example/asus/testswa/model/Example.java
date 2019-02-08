@@ -1,4 +1,5 @@
 package com.example.asus.testswa.model;
+
 import java.util.List;
 
 public class Example {

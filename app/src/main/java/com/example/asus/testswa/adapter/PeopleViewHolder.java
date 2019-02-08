@@ -12,19 +12,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class PeopleViewHolder extends RecyclerView.ViewHolder{
+public class PeopleViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.name)
-    TextView name;
+    TextView mName;
     @BindView(R.id.gender)
-    TextView gender;
+    TextView mGender;
     @BindView(R.id.birth)
-    TextView birth;
+    TextView mBirth;
     @BindView(R.id.card_view)
-    CardView cardView;
+    CardView mCardView;
 
     public PeopleViewHolder(@NonNull View itemView) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
     }
 }

@@ -9,28 +9,28 @@ import io.reactivex.Flowable;
 
 public class PeopleData implements DatabaseHelper {
 
-    private PeopleDAO peopleDAO;
-    private static PeopleData mInstance;
+    private PeopleDAO mPeopleDAO;
+    private static PeopleData sInstance;
 
     private PeopleData(PeopleDAO helper) {
-        this.peopleDAO = helper;
+        this.mPeopleDAO = helper;
     }
 
-    public static PeopleData getInstance(PeopleDAO peopleDAO){
+    public static PeopleData getInstance(PeopleDAO peopleDAO) {
 
-        if (mInstance == null){
-            mInstance = new PeopleData(peopleDAO);
+        if (sInstance == null) {
+            sInstance = new PeopleData(peopleDAO);
         }
-        return mInstance;
+        return sInstance;
     }
 
     @Override
     public Flowable<List<People>> getAllPeople() {
-        return peopleDAO.getAllPeople();
+        return mPeopleDAO.getAllPeople();
     }
 
     @Override
     public void insertPeople(People... people) {
-        peopleDAO.insertPeople(people);
+        mPeopleDAO.insertPeople(people);
     }
 }
