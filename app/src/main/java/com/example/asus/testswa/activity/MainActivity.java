@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<People> people = new ArrayList<>();
     private CompositeDisposable disposable = new CompositeDisposable();
+    private MyAPI myAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +110,14 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    private void initAPI(){
+        Retrofit retrofit = RetrofitClient.getInstance();
+        myAPI = retrofit.create(MyAPI.class);
+    }
+
     private void getPeopleData(final String keyword) {
 
-        Retrofit retrofit = RetrofitClient.getInstance();
-        MyAPI myAPI = retrofit.create(MyAPI.class);
+        initAPI();
 
         disposable.add(myAPI.getPeople(keyword)
                 .subscribeOn(Schedulers.io())

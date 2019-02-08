@@ -29,9 +29,9 @@ public class SavedPeopleActivity extends AppCompatActivity {
     @BindView(R.id.recycle_saved)
     RecyclerView recyclerView;
 
-    private CompositeDisposable compositeDisposable;
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private PeopleRepository repository;
-    private List<People> peopleList;
+    private List<People> peopleList = new ArrayList<>();
     private PeopleAdapter adapter;
 
     @Override
@@ -41,12 +41,9 @@ public class SavedPeopleActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        compositeDisposable = new CompositeDisposable();
-        peopleList = new ArrayList<>();
-
         initRecycle();
         initDB();
-
+        loadData();
     }
 
     private void initRecycle() {
@@ -58,7 +55,6 @@ public class SavedPeopleActivity extends AppCompatActivity {
     private void initDB() {
         PeopleDatabase database = PeopleDatabase.getInstance(this);
         repository = PeopleRepository.getInstance(PeopleData.getInstance(database.peopleDAO()));
-        loadData();
     }
 
     private void loadData() {
