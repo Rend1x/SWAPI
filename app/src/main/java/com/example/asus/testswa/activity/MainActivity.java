@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-
         //recycle
         initRecycle();
 
@@ -58,37 +57,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-    }
-
-    private void initRecycle() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    private void getPeopleData(final String keyword) {
-
-        Retrofit retrofit = RetrofitClient.getInstance();
-        MyAPI myAPI = retrofit.create(MyAPI.class);
-
-        disposable.add(myAPI.getPeople(keyword)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableObserver<Example>() {
-                    @Override
-                    public void onNext(Example example) {
-                        people = example.getResults();
-                        displayData(people,keyword);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Toast.makeText(MainActivity.this, R.string.error_network,
-                                Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onComplete() {}
-                }));
     }
 
     @Override
@@ -136,10 +104,37 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+    private void initRecycle() {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
+
+    private void getPeopleData(final String keyword) {
+
+        Retrofit retrofit = RetrofitClient.getInstance();
+        MyAPI myAPI = retrofit.create(MyAPI.class);
+
+        disposable.add(myAPI.getPeople(keyword)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<Example>() {
+                    @Override
+                    public void onNext(Example example) {
+                        people = example.getResults();
+                        displayData(people,keyword);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(MainActivity.this, R.string.error_network,
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onComplete() {}
+                }));
+    }
+
 
     private void displayData(List<People> people,String keyword) {
         PeopleAdapter metricAdapter = new PeopleAdapter(this,people);

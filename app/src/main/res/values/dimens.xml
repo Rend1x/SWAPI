@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin">5dp</dimen>
+    <dimen name="corner_radius">10dp</dimen>
+    <dimen name="margin_top">8dp</dimen>
+    <dimen name="margin_bot">8dp</dimen>
+    <dimen name="margin_left">4dp</dimen>
+    <dimen name="margin_right">4dp</dimen>
+    <dimen name="margin_bot_dialog">10dp</dimen>
+    <dimen name="margin_top_dialog">5dp</dimen>
+    <dimen name="margin_start_dialog">15dp</dimen>
+    <dimen name="layout_width_dialog">350dp</dimen>
+</resources>

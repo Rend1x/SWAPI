@@ -24,7 +24,6 @@ public class PeopleData implements DatabaseHelper {
         return mInstance;
     }
 
-
     @Override
     public Flowable<List<People>> getAllPeople() {
         return peopleDAO.getAllPeople();
